@@ -1,41 +1,42 @@
 #include "src/var.h"
-#include "src/wstarv/reader.h"
-#include "src/wstarv/writer.h"
-#include "src/rstarv/reader.h"
-#include "src/rstarv/writer.h"
-#include "src/exclude/reader.h"
-#include "src/exclude/writer.h"
+#include "src/wstarv/wstarv.h"
+#include "src/rstarv/rstarv.h"
+#include "src/exclude/exclude.h"
 
 
 
 int main(int argc, char** argv){
     int err;
 
-    readers_num = atoi(argv[1]);
-    writers_num = atoi(argv[2]);
+    readers_queue = readers_num = atoi(argv[1]);
+    writers_queue = writers_num = atoi(argv[2]);
 
     pthread_t readers_thr_id[readers_num];
     pthread_t writers_thr_id[writers_num];
 
 
-    if (pthread_mutex_init(&lock, NULL) != 0){
+    if (pthread_mutex_init(&lock, NULL)){
         printf("\n mutex init failed\n");
         return -1;
     }
 
+    printStatus(0); // Wypisanie poczatkowego stanu
 
     for(int i = 0; i < readers_num; i++){
         int *id = calloc(1, sizeof(int));
-        *id = i;
+        *id = i+1;
         err = pthread_create(&(readers_thr_id[i]), NULL, reader, id);
-        if (err != 0)
+
+        if (err)
             printf("\ncan't create thread :[%s]", strerror(err));
     }
+
     for(int i = 0; i < writers_num; i++){
         int *id = calloc(1, sizeof(int));
-        *id = i;
+        *id = i + 1 + readers_num;
         err = pthread_create(&(writers_thr_id[i]), NULL, writer, id);
-        if (err != 0)
+        
+        if (err)
             printf("\ncan't create thread :[%s]", strerror(err));
     }
 

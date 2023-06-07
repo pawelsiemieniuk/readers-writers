@@ -8,12 +8,9 @@ void* writer(int* id){
     while(1){
         pthread_mutex_lock(&lock);
         if(!lib.readers && !lib.writers){
+            writers_queue--;
             lib.writers++;
-            printf("ReaderQ: %d WriterQ: %d [in: R:%d W:%d] - IN WRITER     %d\n", 
-                    readers_num - lib.readers, 
-                    writers_num - lib.writers, 
-                    lib.readers, lib.writers, thread_id);
-            fflush(stdout);
+            printStatus(thread_id);
             pthread_mutex_unlock(&lock);
 
             time = rand() % MAX_TIME + 1;
@@ -21,14 +18,15 @@ void* writer(int* id){
 
             pthread_mutex_lock(&lock);
             lib.writers--;
-            printf("ReaderQ: %d WriterQ: %d [in: R:%d W:%d] - OUT WRITER    %d\n", 
-                    readers_num - lib.readers, 
-                    writers_num - lib.writers, 
-                    lib.readers, lib.writers, thread_id);
-            fflush(stdout);
+            printStatus(thread_id);
             pthread_mutex_unlock(&lock);
 
             sleep(REST_TIME);
+
+            pthread_mutex_lock(&lock);
+            writers_queue++;
+            printStatus(thread_id);
+            pthread_mutex_unlock(&lock);
         }
         else{
             pthread_mutex_unlock(&lock);

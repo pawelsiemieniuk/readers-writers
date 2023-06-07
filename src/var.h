@@ -25,4 +25,9 @@ extern unsigned int readers_num;
 extern unsigned int writers_num;
 
 
+extern unsigned int readers_queue;
+extern unsigned int writers_queue;
+
+void printStatus(int thread_id);
+
 #endif
