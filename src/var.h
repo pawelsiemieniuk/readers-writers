@@ -8,8 +8,9 @@
 #ifndef VAR
 #define VAR
 
-#define MAX_TIME    2
-#define REST_TIME   1
+
+#define MAX_TIME    5
+#define REST_TIME   2
 
 typedef struct Library
 {
@@ -17,12 +18,11 @@ typedef struct Library
     unsigned int writers;
 }Library;
 
-// Tymczasowo tablica, zamienic na liste
-//pthread_t *thr_id;
-extern pthread_t thr_id[5];
-extern Library lib;
+extern volatile Library lib;
 extern pthread_mutex_t lock;
 
+extern unsigned int readers_num;
+extern unsigned int writers_num;
 
 
 #endif

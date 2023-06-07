@@ -26,13 +26,13 @@ then
     if [[ $2 == +([0-9]) && $3 == +([0-9]) ]]
     then
         if [[ $1 == 1 || "$1" == "wstarv" ]]
-        then `./bin/readers-writers-wstarv $2 $3`
+        then ./bin/readers-writers-wstarv $2 $3
 
         elif [[ $1 == 2 || "$1" == "rstarv" ]]
-        then `./bin/readers-writers-rstarv $2 $3`
+        then ./bin/readers-writers-rstarv $2 $3
 
         elif [[ $1 == 3 || "$1" == "exclude" ]]
-        then `./bin/readers-writers-exclude $2 $3`
+        then ./bin/readers-writers-exclude $2 $3
         
         else
             error_args "1"

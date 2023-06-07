@@ -1,53 +1,52 @@
 #include "src/var.h"
 #include "src/wstarv/reader.h"
 #include "src/wstarv/writer.h"
+#include "src/rstarv/reader.h"
+#include "src/rstarv/writer.h"
+#include "src/exclude/reader.h"
+#include "src/exclude/writer.h"
 
-int main(){
-    int i = 0;
+
+
+int main(int argc, char** argv){
     int err;
-    if (pthread_mutex_init(&lock, NULL) != 0)
-    {
+
+    readers_num = atoi(argv[1]);
+    writers_num = atoi(argv[2]);
+
+    pthread_t readers_thr_id[readers_num];
+    pthread_t writers_thr_id[writers_num];
+
+
+    if (pthread_mutex_init(&lock, NULL) != 0){
         printf("\n mutex init failed\n");
-        return 1;
+        return -1;
     }
 
-    while(i < 3)
-    {
-        err = pthread_create(&(thr_id[i]), NULL, reader, NULL);
+
+    for(int i = 0; i < readers_num; i++){
+        int *id = calloc(1, sizeof(int));
+        *id = i;
+        err = pthread_create(&(readers_thr_id[i]), NULL, reader, id);
         if (err != 0)
             printf("\ncan't create thread :[%s]", strerror(err));
-        i++;
     }
-    
-    while(i < 5)
-    {
-        err = pthread_create(&(thr_id[i]), NULL, writer, NULL);
+    for(int i = 0; i < writers_num; i++){
+        int *id = calloc(1, sizeof(int));
+        *id = i;
+        err = pthread_create(&(writers_thr_id[i]), NULL, writer, id);
         if (err != 0)
             printf("\ncan't create thread :[%s]", strerror(err));
-        i++;
     }
 
-    lib.readers = 0;
-    lib.writers = 0;
-    
-    Library last_lib_state;
-    last_lib_state.readers = 0;
-    last_lib_state.writers = 0;
 
-    while(1){
-        //printf("R:%d , W: %d\n", lib.readers, lib.writer ? 1 : 0);
-        //fflush(stdout);
-
-        if(lib.readers != last_lib_state.readers || lib.writers != last_lib_state.writers){
-            printf("- R:%d , W: %d\n", lib.readers, lib.writers ? 1 : 0);
-            fflush(stdout);
-            last_lib_state.readers = lib.readers;
-            last_lib_state.writers = lib.writers;
-        }
+    for(int i = 0; i < readers_num; i++){
+        pthread_join(readers_thr_id[i], NULL);
+    }
+    for(int i = 0; i < writers_num; i++){
+        pthread_join(writers_thr_id[i], NULL);
     }
 
-    pthread_join(thr_id[0], NULL);
-    pthread_join(thr_id[1], NULL);
     pthread_mutex_destroy(&lock);
 
     return 0;

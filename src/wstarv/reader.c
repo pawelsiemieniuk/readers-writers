@@ -1,28 +1,36 @@
 #include "../var.h"
 
-void* reader(){
+// id nie bedzie potrzebne o ile nie bedziemy chcieli 
+// zrobic dokladniejszej analizy czy na pewno wszyscy wchodza do biblioteki
+void* reader(int* id){
+    int thread_id = *id;
     unsigned int time;
     while(1){
         pthread_mutex_lock(&lock);
         if(!lib.writers){
-            //printf("Reader IN-1 R: %d, W: %d\n", lib.readers, lib.writer ? 1 : 0);
-            //fflush(stdout);
             lib.readers++;
-            sleep(1);
-            //printf("Reader IN-2 R: %d, W: %d\n", lib.readers, lib.writer ? 1 : 0);
-            //fflush(stdout);
+            printf("ReaderQ: %d WriterQ: %d [in: R:%d W:%d] - IN READER     %d\n", 
+                    readers_num - lib.readers, 
+                    writers_num - lib.writers, 
+                    lib.readers, lib.writers, thread_id);
+            fflush(stdout);
             pthread_mutex_unlock(&lock);
             
             time = rand() % MAX_TIME + 1;
-            sleep(time/10);
+            sleep(time);
             
             pthread_mutex_lock(&lock);
-            //printf("Reader OUT R: %d, W: %d\n", lib.readers, lib.writer ? 1 : 0);
-            //fflush(stdout);
             lib.readers--;
+            printf("ReaderQ: %d WriterQ: %d [in: R:%d W:%d] - OUT READER    %d\n", 
+                    readers_num - lib.readers, 
+                    writers_num - lib.writers, 
+                    lib.readers, lib.writers, thread_id);
+            fflush(stdout);
             pthread_mutex_unlock(&lock);
 
-            sleep(REST_TIME);
+            // Jesli damy czas odpoczynku po wyjsciu z biblioteki na 0
+            // to na pewno pisarze beda glodni
+            sleep(REST_TIME); 
         }
         else{
             pthread_mutex_unlock(&lock);

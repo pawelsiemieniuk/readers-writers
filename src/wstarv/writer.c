@@ -1,22 +1,31 @@
 #include "../var.h"
 
-void* writer(){
+// id nie bedzie potrzebne o ile nie bedziemy chcieli 
+// zrobic dokladniejszej analizy czy na pewno wszyscy wchodza do biblioteki
+void* writer(int* id){
+    int thread_id = *id;
     unsigned int time;
     while(1){
         pthread_mutex_lock(&lock);
         if(!lib.readers && !lib.writers){
-            //printf("Writer IN R: %d, W: %d\n", lib.readers, lib.writer ? 1 : 0);
-            //fflush(stdout);
             lib.writers++;
+            printf("ReaderQ: %d WriterQ: %d [in: R:%d W:%d] - IN WRITER     %d\n", 
+                    readers_num - lib.readers, 
+                    writers_num - lib.writers, 
+                    lib.readers, lib.writers, thread_id);
+            fflush(stdout);
             pthread_mutex_unlock(&lock);
 
             time = rand() % MAX_TIME + 1;
             sleep(time);
 
             pthread_mutex_lock(&lock);
-            //printf("Writer OUT R: %d, W: %d\n", lib.readers, lib.writer ? 1 : 0);
-            //fflush(stdout);
             lib.writers--;
+            printf("ReaderQ: %d WriterQ: %d [in: R:%d W:%d] - OUT WRITER    %d\n", 
+                    readers_num - lib.readers, 
+                    writers_num - lib.writers, 
+                    lib.readers, lib.writers, thread_id);
+            fflush(stdout);
             pthread_mutex_unlock(&lock);
 
             sleep(REST_TIME);
