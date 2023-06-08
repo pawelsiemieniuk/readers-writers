@@ -1,14 +1,13 @@
 #include "../var.h"
 
-// id nie bedzie potrzebne o ile nie bedziemy chcieli 
-// zrobic dokladniejszej analizy czy na pewno wszyscy wchodza do biblioteki
+// id tylko do pokazania ktore procesy gloduja
 void* reader(int* id){
     int thread_id = *id;
     unsigned int time;
     while(1){
         pthread_mutex_lock(&lock);
         if(!lib.writers){
-            readers_queue--;
+            que.readers--;
             lib.readers++;
             printStatus(thread_id);
             pthread_mutex_unlock(&lock);
@@ -26,7 +25,7 @@ void* reader(int* id){
             sleep(REST_TIME); 
 
             pthread_mutex_lock(&lock);
-            readers_queue++;
+            que.readers++;
             printStatus(thread_id);
             pthread_mutex_unlock(&lock);
         }

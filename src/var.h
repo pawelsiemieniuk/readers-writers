@@ -10,7 +10,7 @@
 
 
 #define MAX_TIME    5
-#define REST_TIME   2
+#define REST_TIME   1
 
 typedef struct Library
 {
@@ -18,15 +18,19 @@ typedef struct Library
     unsigned int writers;
 }Library;
 
+typedef struct Queue
+{
+    unsigned int readers;
+    unsigned int writers;
+}Queue;
+
 extern volatile Library lib;
+extern volatile Queue que;
+
 extern pthread_mutex_t lock;
 
 extern unsigned int readers_num;
 extern unsigned int writers_num;
-
-
-extern unsigned int readers_queue;
-extern unsigned int writers_queue;
 
 void printStatus(int thread_id);
 

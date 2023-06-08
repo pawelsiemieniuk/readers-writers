@@ -8,8 +8,8 @@
 int main(int argc, char** argv){
     int err;
 
-    readers_queue = readers_num = atoi(argv[1]);
-    writers_queue = writers_num = atoi(argv[2]);
+    que.readers = readers_num = atoi(argv[1]);
+    que.writers = writers_num = atoi(argv[2]);
 
     pthread_t readers_thr_id[readers_num];
     pthread_t writers_thr_id[writers_num];
