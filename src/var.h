@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <signal.h>
 
 #ifndef VAR
 #define VAR
@@ -28,10 +29,20 @@ extern volatile Library lib;
 extern volatile Queue que;
 
 extern pthread_mutex_t lock;
+extern pthread_cond_t readers_lock;
+extern pthread_cond_t writers_lock;
 
 extern unsigned int readers_num;
 extern unsigned int writers_num;
 
+extern time_t *threads_last_entry;
+extern time_t *threads_max_wait_time;
+
+extern time_t start_time;
+
+
 void printStatus(int thread_id);
+
+void signalHandler();
 
 #endif

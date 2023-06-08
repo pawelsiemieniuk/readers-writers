@@ -1,27 +1,34 @@
 #include "../var.h"
 
-// id tylko do pokazania ktore procesy gloduja
+
 void* reader(int* id){
     int thread_id = *id;
-    unsigned int time;
+    unsigned int reading_time;
+    time_t d_time;
+
     while(1){
         pthread_mutex_lock(&lock);
         if(!lib.writers){
             que.readers--;
             lib.readers++;
             printStatus(thread_id);
+
+            d_time = time(NULL) - threads_last_entry[thread_id];
+            if(threads_max_wait_time[thread_id] < d_time){
+                threads_max_wait_time[thread_id] = d_time;
+            }
+            threads_last_entry[thread_id] = time(NULL);
+
             pthread_mutex_unlock(&lock);
             
-            time = rand() % MAX_TIME + 1;
-            sleep(time);
+            reading_time = rand() % MAX_TIME + 1;
+            sleep(reading_time);
             
             pthread_mutex_lock(&lock);
             lib.readers--;
             printStatus(thread_id);
             pthread_mutex_unlock(&lock);
 
-            // Jesli damy czas odpoczynku po wyjsciu z biblioteki na 0
-            // to na pewno pisarze beda glodni
             sleep(REST_TIME); 
 
             pthread_mutex_lock(&lock);
