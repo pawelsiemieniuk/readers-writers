@@ -28,6 +28,8 @@ extern volatile Library lib;
 extern volatile Queue que;
 
 extern pthread_mutex_t lock;
+extern pthread_cond_t readers_lock;
+extern pthread_cond_t writers_lock;
 
 extern unsigned int readers_num;
 extern unsigned int writers_num;

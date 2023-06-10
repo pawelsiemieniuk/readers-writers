@@ -6,7 +6,6 @@
 
 
 int main(int argc, char** argv){
-    int err;
 
     que.readers = readers_num = atoi(argv[1]);
     que.writers = writers_num = atoi(argv[2]);
@@ -14,32 +13,28 @@ int main(int argc, char** argv){
     pthread_t readers_thr_id[readers_num];
     pthread_t writers_thr_id[writers_num];
 
+    srand(time(NULL));
 
-    if (pthread_mutex_init(&lock, NULL)){
-        printf("\n mutex init failed\n");
-        return -1;
-    }
-
-    printStatus(0); // Wypisanie poczatkowego stanu
+    printStatus(-1); // Wypisanie poczatkowego stanu
 
     for(int i = 0; i < readers_num; i++){
         int *id = calloc(1, sizeof(int));
-        *id = i+1;
-        err = pthread_create(&(readers_thr_id[i]), NULL, reader, id);
+        *id = i;
 
-        if (err)
-            printf("\ncan't create thread :[%s]", strerror(err));
+        pthread_create(&(readers_thr_id[i]), NULL, reader, id);
     }
 
     for(int i = 0; i < writers_num; i++){
         int *id = calloc(1, sizeof(int));
         *id = i + 1 + readers_num;
-        err = pthread_create(&(writers_thr_id[i]), NULL, writer, id);
         
-        if (err)
-            printf("\ncan't create thread :[%s]", strerror(err));
+        pthread_create(&(writers_thr_id[i]), NULL, writer, id);
     }
 
+    pthread_mutex_lock(&lock);
+    //pthread_cond_signal(&writers_lock);
+    pthread_cond_broadcast(&readers_lock);
+    pthread_mutex_unlock(&lock);
 
     for(int i = 0; i < readers_num; i++){
         pthread_join(readers_thr_id[i], NULL);
@@ -47,8 +42,6 @@ int main(int argc, char** argv){
     for(int i = 0; i < writers_num; i++){
         pthread_join(writers_thr_id[i], NULL);
     }
-
-    pthread_mutex_destroy(&lock);
 
     return 0;
 }

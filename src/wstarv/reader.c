@@ -3,25 +3,25 @@
 // id tylko do pokazania ktore procesy gloduja
 void* reader(int* id){
     int thread_id = *id;
-    unsigned int time;
+    unsigned int reading_time;
+
     while(1){
         pthread_mutex_lock(&lock);
         if(!lib.writers){
+
             que.readers--;
             lib.readers++;
             printStatus(thread_id);
             pthread_mutex_unlock(&lock);
             
-            time = rand() % MAX_TIME + 1;
-            sleep(time);
-            
+            reading_time = rand() % MAX_TIME + 1;
+            sleep(reading_time);
+
             pthread_mutex_lock(&lock);
             lib.readers--;
             printStatus(thread_id);
             pthread_mutex_unlock(&lock);
 
-            // Jesli damy czas odpoczynku po wyjsciu z biblioteki na 0
-            // to na pewno pisarze beda glodni
             sleep(REST_TIME); 
 
             pthread_mutex_lock(&lock);

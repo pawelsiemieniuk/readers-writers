@@ -3,7 +3,7 @@
 // id tylko do pokazania ktore procesy gloduja
 void* writer(int* id){
     int thread_id = *id;
-    unsigned int time;
+    unsigned int writing_time;
     while(1){
         pthread_mutex_lock(&lock);
         if(!lib.readers && !lib.writers && !que.readers){
@@ -12,8 +12,8 @@ void* writer(int* id){
             printStatus(thread_id);
             pthread_mutex_unlock(&lock);
 
-            time = rand() % MAX_TIME + 1;
-            sleep(time);
+            writing_time = rand() % MAX_TIME + 1;
+            sleep(writing_time);
 
             pthread_mutex_lock(&lock);
             lib.writers--;
