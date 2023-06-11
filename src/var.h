@@ -31,6 +31,9 @@ extern pthread_mutex_t lock;
 extern pthread_cond_t readers_lock;
 extern pthread_cond_t writers_lock;
 
+// Zlicza ilu pisarzy mialo dostep do biblioteki w jednym cyklu (wykluczenie zaglodzenia)
+extern unsigned int writers_counter;
+
 extern unsigned int readers_num;
 extern unsigned int writers_num;
 

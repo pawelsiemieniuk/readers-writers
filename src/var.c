@@ -22,6 +22,8 @@ pthread_mutex_t lock        = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t readers_lock = PTHREAD_COND_INITIALIZER;
 pthread_cond_t writers_lock = PTHREAD_COND_INITIALIZER;
 
+unsigned int writers_counter;
+
 unsigned int readers_num;
 unsigned int writers_num;
 
