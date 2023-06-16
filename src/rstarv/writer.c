@@ -12,7 +12,8 @@ void* writer(int* id){
         {
             que.writers--;
             lib.writers++;
-            printStatus(thread_id);
+            printStatus();
+            logEntryTime(thread_id);
         }
         pthread_mutex_unlock(&lock);
 
@@ -22,7 +23,8 @@ void* writer(int* id){
         pthread_mutex_lock(&lock);
         {
             lib.writers--;
-            printStatus(thread_id);
+            printStatus();
+            
             if(!que.writers)
                 pthread_cond_broadcast(&readers_lock);
             else
@@ -35,7 +37,7 @@ void* writer(int* id){
         pthread_mutex_lock(&lock);
         {
             que.writers++;
-            printStatus(thread_id);
+            printStatus();
         }
         pthread_mutex_unlock(&lock);
     }

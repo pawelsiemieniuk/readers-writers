@@ -12,7 +12,8 @@ void* reader(int* id){
         {
             que.readers--;
             lib.readers++;
-            printStatus(thread_id);
+            printStatus();
+            logEntryTime(thread_id);
         }
         pthread_mutex_unlock(&lock);
 
@@ -22,7 +23,7 @@ void* reader(int* id){
         pthread_mutex_lock(&lock);
         {
             lib.readers--;
-            printStatus(thread_id);
+            printStatus();
 
             if(!lib.readers)
                 pthread_cond_signal(&writers_lock);
@@ -34,7 +35,7 @@ void* reader(int* id){
         pthread_mutex_lock(&lock);
         {
             que.readers++;
-            printStatus(thread_id);
+            printStatus();
         }
         pthread_mutex_unlock(&lock);
     }

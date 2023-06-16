@@ -11,4 +11,5 @@ void* writer();
  * po czym opuszcza czytelnię, redukując liczbę pisarzy w czytelni.
  * Po odczekaniu czasu odpoczynku, zwiększa liczbę pisarzy w oczekujących na wejście i kontynuuje działanie w pętli.
  */
+
 #endif

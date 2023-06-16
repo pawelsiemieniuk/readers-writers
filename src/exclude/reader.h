@@ -2,7 +2,6 @@
 #define READER_EXCLUDE
 
 void* reader();
-
 /*
  * Funkcja reprezentująca wątek czytelnika.
  * 

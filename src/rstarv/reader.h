@@ -12,4 +12,5 @@ void* reader();
  * Jeśli nie ma innych czytelników w czytelni, sygnalizuje pisarzom możliwość dostępu.
  * Po odczekaniu czasu odpoczynku, zwiększa liczbę czytelników oczekujących na wejście i kontynuuje działanie w pętli.
  */
+
 #endif

@@ -11,4 +11,5 @@ void* reader();
  * po czym opuszcza czytelnię, redukując liczbę czytelników w czytelni.
  * Po odczekaniu czasu odpoczynku, zwiększa liczbę czytelników oczekujących na wejście i kontynuuje działanie w pętli.
  */
+
 #endif
