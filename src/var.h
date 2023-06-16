@@ -25,8 +25,8 @@ typedef struct Queue
     unsigned int writers;
 }Queue;
 
-extern volatile Library lib;
-extern volatile Queue   que;
+extern Library lib;
+extern Queue   que;
 
 extern pthread_mutex_t  lock;
 extern pthread_cond_t   readers_lock;
