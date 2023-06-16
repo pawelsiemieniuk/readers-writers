@@ -18,7 +18,7 @@ error(){
 }
 
 help(){
-    echo "Usage: ./run.sh [OPTION] ... [VERSION] [READERS] [WRITERS]"
+    echo "Usage: ./run.sh [OPTION] ... VERSION READERS WRITERS"
     echo "Runs VERSION of 'readers-writers-problem' program with READERS and WRITERS as arguments."
     echo ""
     echo "OPTIONs:"
