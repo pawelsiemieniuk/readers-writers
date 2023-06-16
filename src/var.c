@@ -16,8 +16,8 @@ typedef struct Queue
     unsigned int writers;
 }Queue;
 
-volatile Library lib;
-volatile Queue   que;
+Library lib;
+Queue   que;
 
 pthread_mutex_t lock         = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t  readers_lock = PTHREAD_COND_INITIALIZER;
