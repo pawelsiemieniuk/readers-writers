@@ -10,6 +10,11 @@
 
 int main(int argc, char** argv){
 
+    if(argc < 3){
+        printf("At least 2 arguments are needed! \nPlease use script 'run.sh' to execute the program without the issues.");
+        return -1;
+    }
+    
     start_time = time(NULL);
 
     que.readers = readers_num = atoi(argv[1]);
